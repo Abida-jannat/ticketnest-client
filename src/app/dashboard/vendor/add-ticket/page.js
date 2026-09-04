@@ -1,23 +1,94 @@
 "use client";
 
 import { useState } from "react";
-import { PlusCircle, Ticket, MapPin, Calendar, DollarSign } from "@gravity-ui/icons";
+import { Plus } from "@gravity-ui/icons";
 
 export default function AddTicketPage() {
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  // Replace with your actual authentication context or props user email/name
+  const vendorName = "Green Travels Ltd";
+  const vendorEmail = "vendor@ticketnest.com";
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Add your ticket creation logic/API call here
-    setTimeout(() => {
+
+    try {
+      const form = e.target;
+      const imageFile = form.image.files[0];
+
+      if (!imageFile) {
+        alert("Please select a ticket banner or bus image.");
+        setLoading(false);
+        return;
+      }
+
+      // 1. Upload Image to ImgBB using environment variable
+      const formData = new FormData();
+      formData.append("image", imageFile);
+
+      const imgbbRes = await fetch(
+        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const imgbbData = await imgbbRes.json();
+
+      if (!imgbbData.success) {
+        throw new Error("Image upload failed via ImgBB.");
+      }
+      const imageUrl = imgbbData.data.url;
+
+      // 2. Gather Perks (Checkboxes)
+      const perks = Array.from(
+        form.querySelectorAll('input[name="perks"]:checked')
+      ).map((el) => el.value);
+
+      // 3. Construct Ticket Payload
+      const ticketPayload = {
+        title: form.title.value,
+        from: form.from.value,
+        to: form.to.value,
+        transportType: form.transportType.value,
+        price: Number(form.price.value),
+        quantity: Number(form.quantity.value),
+        departureDateTime: form.departureDateTime.value,
+        perks: perks,
+        image: imageUrl,
+        vendorName: vendorName,
+        vendorEmail: vendorEmail,
+      };
+
+      // 4. Send to Backend Server using environment variable base URL
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/tickets`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ticketPayload),
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        alert("Ticket added successfully with 'pending' status!");
+        form.reset();
+      } else {
+        alert(result.message || "Failed to add ticket.");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("An error occurred while publishing the ticket.");
+    } finally {
       setLoading(false);
-      alert("Ticket added successfully!");
-    }, 1000);
+    }
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto pb-12">
       <div className="mb-6">
         <h1 className="text-2xl font-bold tracking-tight text-white">
           Add New Ticket
@@ -36,6 +107,7 @@ export default function AddTicketPage() {
                 Ticket Title / Route Name
               </label>
               <input
+                name="title"
                 type="text"
                 required
                 placeholder="e.g. Dhaka to Sylhet Express"
@@ -43,17 +115,22 @@ export default function AddTicketPage() {
               />
             </div>
 
-            {/* Transport/Bus Company */}
+            {/* Transport Type */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Transport / Operator Name
+                Transport Type
               </label>
-              <input
-                type="text"
+              <select
+                name="transportType"
                 required
-                placeholder="e.g. Green Line / Hanif Enterprise"
-                className="w-full rounded-xl border border-gray-800 bg-gray-900 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-              />
+                className="w-full rounded-xl border border-gray-800 bg-gray-900 px-4 py-2.5 text-sm text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              >
+                <option value="">Select Transport Type</option>
+                <option value="AC Bus">AC Bus</option>
+                <option value="Non-AC Bus">Non-AC Bus</option>
+                <option value="Sleeper Coach">Sleeper Coach</option>
+                <option value="Microbus">Microbus</option>
+              </select>
             </div>
 
             {/* Departure Location */}
@@ -62,6 +139,7 @@ export default function AddTicketPage() {
                 From (Departure)
               </label>
               <input
+                name="from"
                 type="text"
                 required
                 placeholder="e.g. Dhaka"
@@ -75,6 +153,7 @@ export default function AddTicketPage() {
                 To (Destination)
               </label>
               <input
+                name="to"
                 type="text"
                 required
                 placeholder="e.g. Sylhet"
@@ -85,38 +164,107 @@ export default function AddTicketPage() {
             {/* Price */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Price (BDT)
+                Price (per unit in BDT)
               </label>
               <input
+                name="price"
                 type="number"
+                min="1"
                 required
                 placeholder="e.g. 1200"
                 className="w-full rounded-xl border border-gray-800 bg-gray-900 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
-            {/* Available Seats */}
+            {/* Ticket Quantity */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Total Seats Available
+                Ticket Quantity (Total Seats)
               </label>
               <input
+                name="quantity"
                 type="number"
+                min="1"
                 required
                 placeholder="e.g. 40"
                 className="w-full rounded-xl border border-gray-800 bg-gray-900 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
             </div>
 
-            {/* Departure Date */}
+            {/* Departure Date & Time */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Departure Date & Time
               </label>
               <input
+                name="departureDateTime"
                 type="datetime-local"
                 required
                 className="w-full rounded-xl border border-gray-800 bg-gray-900 px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Perks Checkboxes */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-300 mb-3">
+                Perks & Amenities
+              </label>
+              <div className="flex flex-wrap gap-4">
+                {["AC", "Breakfast", "WiFi", "Water Bottle", "Blanket", "TV"].map(
+                  (perk) => (
+                    <label
+                      key={perk}
+                      className="inline-flex items-center gap-2 cursor-pointer text-sm text-gray-300 bg-gray-900 px-3.5 py-2 rounded-xl border border-gray-800 hover:border-gray-700"
+                    >
+                      <input
+                        type="checkbox"
+                        name="perks"
+                        value={perk}
+                        className="rounded border-gray-700 bg-gray-800 text-blue-600 focus:ring-blue-500"
+                      />
+                      {perk}
+                    </label>
+                  )
+                )}
+              </div>
+            </div>
+
+            {/* Image Upload */}
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Ticket / Bus Image Upload
+              </label>
+              <input
+                name="image"
+                type="file"
+                accept="image/*"
+                required
+                className="w-full text-sm text-gray-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 cursor-pointer bg-gray-900 rounded-xl border border-gray-800"
+              />
+            </div>
+
+            {/* Readonly Vendor Details */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Vendor Name (Readonly)
+              </label>
+              <input
+                type="text"
+                value={vendorName}
+                readOnly
+                className="w-full rounded-xl border border-gray-800 bg-gray-900/50 px-4 py-2.5 text-sm text-gray-400 cursor-not-allowed focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Vendor Email (Readonly)
+              </label>
+              <input
+                type="text"
+                value={vendorEmail}
+                readOnly
+                className="w-full rounded-xl border border-gray-800 bg-gray-900/50 px-4 py-2.5 text-sm text-gray-400 cursor-not-allowed focus:outline-none"
               />
             </div>
           </div>
@@ -127,8 +275,8 @@ export default function AddTicketPage() {
               disabled={loading}
               className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-900/30 transition hover:bg-blue-500 disabled:opacity-50"
             >
-              <PlusCircle width={18} height={18} />
-              <span>{loading ? "Publishing Ticket..." : "Publish Ticket"}</span>
+              <Plus width={18} height={18} />
+              <span>{loading ? "Publishing Ticket..." : "Add Ticket"}</span>
             </button>
           </div>
         </form>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Ticket, Plus, TrashCan, Pencil } from "@gravity-ui/icons";
+import { Ticket, Plus, TrashBin, Pencil } from "@gravity-ui/icons";
 
 export default function MyAddedTicketsPage() {
   // Sample added tickets array - replace with your actual fetched database data later
@@ -70,7 +70,7 @@ export default function MyAddedTicketsPage() {
                         <Pencil width={16} height={16} />
                       </button>
                       <button className="inline-flex items-center justify-center rounded-lg border border-red-900/40 bg-red-500/10 p-2 text-red-400 hover:bg-red-500/20 transition">
-                        <TrashCan width={16} height={16} />
+                        <TrashBin width={16} height={16} />
                       </button>
                     </td>
                   </tr>

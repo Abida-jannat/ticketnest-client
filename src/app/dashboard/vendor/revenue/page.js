@@ -1,9 +1,8 @@
-import { ChartColumnStacked, DollarSign, Ticket, ArrowUpRight } from "@gravity-ui/icons";
+import { ChartColumnStacked, FileDollar, Ticket, ArrowUpRight } from "@gravity-ui/icons";
 
 export default function RevenueOverviewPage() {
-  // Sample revenue statistics and history - replace with your actual database metrics later
   const stats = [
-    { title: "Total Revenue", value: "BDT 24,000", change: "+12% this month", icon: DollarSign },
+    { title: "Total Revenue", value: "BDT 24,000", change: "+12% this month", icon: FileDollar },
     { title: "Tickets Sold", value: "20", change: "+4 new today", icon: Ticket },
     { title: "Average Ticket Price", value: "BDT 1,200", change: "Stable", icon: ChartColumnStacked },
   ];
