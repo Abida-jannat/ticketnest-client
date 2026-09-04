@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar } from "@heroui/react";
+import { Avatar } from "@heroui/react";
 import {
   Car,
   Person,
@@ -10,12 +10,12 @@ import {
   Bars,
   Xmark,
 } from "@gravity-ui/icons";
-import { useSession, signOut } from "@/lib/auth-client"; // Adjust path to your Better Auth client
+import { useSession, signOut } from "@/lib/auth-client";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
 
-  // Better Auth session integration
   const { data: session, isPending } = useSession();
   const isLoggedIn = !!session;
 
@@ -106,21 +106,21 @@ export default function Navbar() {
             ) : !isLoggedIn ? (
               <>
                 {/* Desktop Auth Links */}
-                   <div className="hidden items-center gap-2 sm:flex">
-              <Link
-                href="/auth/login"
-                className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-gray-300 transition hover:bg-gray-800 hover:text-white"
-              >
-               Login
-             </Link>
+                <div className="hidden items-center gap-2 sm:flex">
+                  <Link
+                    href="/auth/login"
+                    className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-gray-300 transition hover:bg-gray-800 hover:text-white"
+                  >
+                    Login
+                  </Link>
 
-               <Link
-                 href="/auth/register"
-                 className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-900/30 transition hover:bg-blue-500"
-                 >
-                Register
-              </Link>
-            </div>
+                  <Link
+                    href="/auth/register"
+                    className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-900/30 transition hover:bg-blue-500"
+                  >
+                    Register
+                  </Link>
+                </div>
 
                 {/* Mobile Hamburger Toggle Button */}
                 <button
@@ -139,71 +139,38 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                {/* Logged In User Dropdown */}
-                <Dropdown placement="bottom-end">
-                  <DropdownTrigger>
-                    <button
-                      type="button"
-                      className="flex items-center gap-2 rounded-xl border border-gray-800 bg-gray-900 p-1.5 pr-3 transition hover:border-gray-700 hover:bg-gray-800"
-                    >
-                      <Avatar
-                        src={user.avatar}
-                        name={user.name}
-                        size="sm"
-                      />
+                {/* Logged In Direct Profile & Logout Buttons (No Dropdown) */}
+                <div className="flex items-center gap-2">
+                  <Link
+                    href="/profile"
+                    className="flex items-center gap-2 rounded-xl border border-gray-800 bg-gray-900 p-1.5 pr-3 transition hover:border-gray-700 hover:bg-gray-800"
+                  >
+                    <Avatar
+                      src={user.avatar}
+                      name={user.name}
+                      size="sm"
+                    />
 
-                      <div className="hidden text-left sm:block">
-                        <p className="text-xs font-bold text-white">
-                          {user.name}
-                        </p>
+                    <div className="hidden text-left sm:block">
+                      <p className="text-xs font-bold text-white">
+                        {user.name}
+                      </p>
 
-                        <p className="text-[10px] text-gray-500">
-                          Account
-                        </p>
-                      </div>
-                    </button>
-                  </DropdownTrigger>
+                      <p className="text-[10px] text-gray-500">
+                        Account
+                      </p>
+                    </div>
+                  </Link>
 
-                  <DropdownMenu aria-label="User menu" className="border border-gray-800 bg-gray-950 p-1 text-gray-200">
-                    <DropdownItem
-                      key="profile-info"
-                      isReadOnly
-                      className="cursor-default opacity-100"
-                    >
-                      <div>
-                        <p className="font-semibold text-white">
-                          {user.name}
-                        </p>
-
-                        <p className="text-xs text-gray-500">
-                          {user.email}
-                        </p>
-                      </div>
-                    </DropdownItem>
-
-                    <DropdownItem key="profile">
-                      <Link
-                        href="/profile"
-                        className="flex w-full items-center gap-2 text-gray-300"
-                      >
-                        <Person width={17} height={17} />
-                        My Profile
-                      </Link>
-                    </DropdownItem>
-
-                    <DropdownItem
-                      key="logout"
-                      className="text-danger"
-                      color="danger"
-                      onPress={handleLogout}
-                    >
-                      <div className="flex items-center gap-2">
-                        <ArrowRightFromSquare width={17} height={17} />
-                        Logout
-                      </div>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-red-900/50 bg-red-950/30 px-3.5 py-2 text-xs font-semibold text-red-400 transition hover:bg-red-900/40"
+                  >
+                    <ArrowRightFromSquare width={15} height={15} />
+                    <span className="hidden sm:inline">Logout</span>
+                  </button>
+                </div>
 
                 {/* Mobile Menu Button for Logged In User */}
                 <button
@@ -244,17 +211,26 @@ export default function Navbar() {
               </Link>
 
               {isLoggedIn && (
-                <Link
-                  href="/dashboard"
-                  onClick={closeMenu}
-                  className="rounded-xl px-4 py-3 font-medium text-gray-400 transition hover:bg-gray-900 hover:text-white"
-                >
-                  Dashboard
-                </Link>
+                <>
+                  <Link
+                    href="/dashboard"
+                    onClick={closeMenu}
+                    className="rounded-xl px-4 py-3 font-medium text-gray-400 transition hover:bg-gray-900 hover:text-white"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    href="/profile"
+                    onClick={closeMenu}
+                    className="rounded-xl px-4 py-3 font-medium text-gray-400 transition hover:bg-gray-900 hover:text-white"
+                  >
+                    My Profile
+                  </Link>
+                </>
               )}
 
               {/* Mobile Auth Buttons */}
-              {!isLoggedIn && (
+              {!isLoggedIn ? (
                 <div className="mt-2 grid grid-cols-2 gap-2 border-t border-gray-800 pt-4">
                   <Link
                     href="/auth/login"
@@ -271,6 +247,20 @@ export default function Navbar() {
                   >
                     Register
                   </Link>
+                </div>
+              ) : (
+                <div className="mt-2 border-t border-gray-800 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleLogout();
+                      closeMenu();
+                    }}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-red-950/40 border border-red-900/50 px-4 py-3 text-sm font-semibold text-red-400 transition hover:bg-red-900/40"
+                  >
+                    <ArrowRightFromSquare width={16} height={16} />
+                    Logout
+                  </button>
                 </div>
               )}
             </nav>
