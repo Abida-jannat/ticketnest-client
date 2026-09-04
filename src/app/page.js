@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { ArrowRight, Check, Sparkles } from "@gravity-ui/icons";
+import { ArrowRight, Check, Sparkles, Shield, Clock, Compass, Headphones } from "@gravity-ui/icons";
 
-// Admin-chosen featured tickets with Deshi flavor (Exactly 6 cards)
-const featuredTickets = [
+// 1. Latest Added Tickets (8 Items as per requirement)
+const latestTickets = [
   {
     id: "1",
     title: "Dhaka to Sylhet Green Express",
@@ -57,13 +57,38 @@ const featuredTickets = [
     transportType: "Car",
     perks: ["Meet & Greet", "Flight Tracking", "Luggage Help"],
   },
+  {
+    id: "7",
+    title: "Khulna to Sundarbans Safari Ride",
+    image: "https://images.unsplash.com/photo-1506015391300-4802dc74de2e?auto=format&fit=crop&q=80&w=800",
+    price: 1600,
+    quantity: 7,
+    transportType: "Bus",
+    perks: ["Guide Included", "Secure Seats", "Refreshments"],
+  },
+  {
+    id: "8",
+    title: "Barisal Floating Market Explorer",
+    image: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&q=80&w=800",
+    price: 1150,
+    quantity: 10,
+    transportType: "Car",
+    perks: ["Private Ride", "Flexible Hours", "AC"],
+  },
+];
+
+// Extra Section 1 Data: Popular Routes
+const popularRoutes = [
+  { title: "Dhaka ⇄ Sylhet", desc: "Most traveled corporate and leisure corridor.", count: "45+ Daily Trips" },
+  { title: "Dhaka ⇄ Cox's Bazar", desc: "Direct overnight sleeper coaches to the beach.", count: "30+ Daily Trips" },
+  { title: "Chittagong ⇄ Bandarban", desc: "Scenic mountain getaways with expert drivers.", count: "20+ Daily Trips" },
 ];
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col gap-12 px-4 py-8 sm:px-6">
+    <div className="flex flex-col gap-16 px-4 py-8 sm:px-6 lg:px-12">
       
-      {/* 1. Hero Banner / Slider Section */}
+      {/* Hero Banner Section */}
       <section className="relative overflow-hidden rounded-3xl border border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950 px-6 py-20 sm:px-12 lg:py-28 shadow-2xl">
         <div className="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-blue-600/15 blur-3xl pointer-events-none" />
         <div className="absolute -left-24 -bottom-24 h-96 w-96 rounded-full bg-indigo-600/15 blur-3xl pointer-events-none" />
@@ -94,25 +119,25 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2. Admin Advertisement Section (Exactly 6 Featured Tickets) */}
+      {/* Main Requirement: Latest Tickets Section (8 Newly Added Tickets) */}
       <section className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
           <div>
-            <div className="text-xs font-bold uppercase tracking-wider text-blue-500 mb-1">Popular Routes</div>
-            <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">Admin Featured Tickets</h2>
+            <div className="text-xs font-bold uppercase tracking-wider text-blue-500 mb-1">Freshly Added</div>
+            <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">Latest Tickets</h2>
           </div>
-          <p className="text-xs text-gray-400 max-w-sm">Hand-selected high-demand routes across popular Bangladeshi destinations verified by administration.</p>
+          <p className="text-xs text-gray-400 max-w-sm">Browse the 8 most recently published travel tickets, buses, and private car options.</p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredTickets.map((ticket) => (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {latestTickets.map((ticket) => (
             <div
               key={ticket.id}
               className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-gray-800 bg-gray-950 transition-all hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-950/30"
             >
               <div>
-                {/* Image & Transport Type Badge */}
-                <div className="relative h-48 w-full overflow-hidden bg-gray-900">
+                {/* 1. Image & Transport Type Badge */}
+                <div className="relative h-44 w-full overflow-hidden bg-gray-900">
                   <img
                     src={ticket.image}
                     alt={ticket.title}
@@ -123,30 +148,32 @@ export default function HomePage() {
                   </span>
                 </div>
 
-                {/* Ticket Details Info */}
-                <div className="p-5">
-                  <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition">
+                {/* Card Body Content */}
+                <div className="p-4">
+                  {/* 2. Ticket Title */}
+                  <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition line-clamp-1">
                     {ticket.title}
                   </h3>
 
+                  {/* 3 & 4. Price per unit & Quantity */}
                   <div className="mt-3 flex items-baseline justify-between">
                     <div>
-                      <span className="text-2xl font-black text-white">৳{ticket.price}</span>
-                      <span className="text-xs text-gray-500"> / unit</span>
+                      <span className="text-xl font-black text-white">৳{ticket.price}</span>
+                      <span className="text-[11px] text-gray-500"> / unit</span>
                     </div>
                     <div className="text-xs font-medium text-gray-400">
-                      Stock: <span className="text-white font-bold">{ticket.quantity}</span> left
+                      Qty: <span className="text-white font-bold">{ticket.quantity}</span>
                     </div>
                   </div>
 
-                  {/* Perks List */}
-                  <div className="mt-4 flex flex-wrap gap-1.5">
+                  {/* 5. Perks */}
+                  <div className="mt-3 flex flex-wrap gap-1">
                     {ticket.perks.map((perk, index) => (
                       <span
                         key={index}
-                        className="inline-flex items-center gap-1 rounded-md bg-gray-900 px-2.5 py-1 text-[11px] text-gray-300 border border-gray-800"
+                        className="inline-flex items-center gap-1 rounded-md bg-gray-900 px-2 py-0.5 text-[10px] text-gray-300 border border-gray-800"
                       >
-                        <Check width={12} height={12} className="text-blue-500" />
+                        <Check width={10} height={10} className="text-blue-500" />
                         {perk}
                       </span>
                     ))}
@@ -154,11 +181,11 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Action Button */}
-              <div className="p-5 pt-0">
+              {/* 6. "See details" Button linking to /tickets/[id] */}
+              <div className="p-4 pt-0">
                 <Link
                   href={`/tickets/${ticket.id}`}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-gray-800 bg-gray-900 py-3 text-xs font-bold text-white transition hover:border-blue-500 hover:bg-blue-600"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-gray-800 bg-gray-900 py-2.5 text-xs font-bold text-white transition hover:border-blue-500 hover:bg-blue-600"
                 >
                   See details
                   <ArrowRight width={14} height={14} />
@@ -166,6 +193,59 @@ export default function HomePage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Extra Section 1: Popular Routes */}
+      <section className="space-y-6">
+        <div>
+          <div className="text-xs font-bold uppercase tracking-wider text-blue-500 mb-1">High Demand</div>
+          <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">Popular Routes</h2>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {popularRoutes.map((route, i) => (
+            <div key={i} className="rounded-2xl border border-gray-800 bg-gray-950 p-6 flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-white">{route.title}</h3>
+                <p className="mt-2 text-xs text-gray-400">{route.desc}</p>
+              </div>
+              <div className="mt-6 inline-flex items-center gap-2 text-xs font-semibold text-blue-400">
+                <Compass width={14} height={14} />
+                <span>{route.count}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Extra Section 2: Why Choose Us? */}
+      <section className="rounded-3xl border border-gray-800 bg-gradient-to-r from-gray-950 via-gray-900 to-gray-950 p-8 sm:p-12">
+        <div className="max-w-xl mb-8">
+          <div className="text-xs font-bold uppercase tracking-wider text-blue-500 mb-1">Reliability Assured</div>
+          <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">Why Travel With TicketNest?</h2>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-3">
+          <div className="space-y-2">
+            <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20">
+              <Shield width={20} height={20} />
+            </div>
+            <h3 className="text-base font-bold text-white">100% Verified Tickets</h3>
+            <p className="text-xs text-gray-400">All transport operators are authenticated directly by platform admin to ensure safety.</p>
+          </div>
+          <div className="space-y-2">
+            <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20">
+              <Clock width={20} height={20} />
+            </div>
+            <h3 className="text-base font-bold text-white">Instant Booking</h3>
+            <p className="text-xs text-gray-400">Secure your seats in seconds with smooth, lightning-fast digital booking workflows.</p>
+          </div>
+          <div className="space-y-2">
+            <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20">
+              <Headphones width={20} height={20} />
+            </div>
+            <h3 className="text-base font-bold text-white">24/7 Support</h3>
+            <p className="text-xs text-gray-400">Dedicated help desk assistance for cancellations, schedule updates, and customer inquiries.</p>
+          </div>
         </div>
       </section>
 
