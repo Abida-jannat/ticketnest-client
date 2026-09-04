@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar } from "@heroui/react";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar } from "@heroui/react";
 import {
   Car,
   Person,
@@ -10,27 +10,33 @@ import {
   Bars,
   Xmark,
 } from "@gravity-ui/icons";
+import { useSession, signOut } from "@/lib/auth-client"; // Adjust path to your Better Auth client
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Temporary authentication state
-  // Later replace this with Better Auth
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Better Auth session integration
+  const { data: session, isPending } = useSession();
+  const isLoggedIn = !!session;
 
   const user = {
-    name: "name",
-    email: "exmple@ticketnest.com",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
+    name: session?.user?.name || "User",
+    email: session?.user?.email || "",
+    avatar: session?.user?.image || "https://i.pravatar.cc/150?u=a042581f4e29026704d",
   };
 
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    closeMenu();
+  const handleLogout = async () => {
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          closeMenu();
+        },
+      },
+    });
   };
 
   return (
@@ -68,8 +74,6 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden items-center gap-1 rounded-xl border border-gray-800 bg-gray-900 p-1 md:flex">
-
-            {/* Active */}
             <Link
               href="/"
               className="rounded-lg bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-blue-900/30 transition hover:bg-blue-500"
@@ -97,32 +101,28 @@ export default function Navbar() {
           {/* Right Section */}
           <div className="flex items-center gap-2">
 
-            {!isLoggedIn ? (
+            {isPending ? (
+              <div className="h-9 w-20 animate-pulse rounded-xl bg-gray-900" />
+            ) : !isLoggedIn ? (
               <>
-                {/* Desktop Auth Buttons */}
-                <div className="hidden items-center gap-2 sm:flex">
+                {/* Desktop Auth Links */}
+                   <div className="hidden items-center gap-2 sm:flex">
+              <Link
+                href="/auth/login"
+                className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-gray-300 transition hover:bg-gray-800 hover:text-white"
+              >
+               Login
+             </Link>
 
-                  <Button
-                    as={Link}
-                    href="/auth/login"
-                    variant="light"
-                    className="font-semibold text-gray-300 hover:bg-gray-800 hover:text-white"
-                  >
-                    Login
-                  </Button>
+               <Link
+                 href="/auth/register"
+                 className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-900/30 transition hover:bg-blue-500"
+                 >
+                Register
+              </Link>
+            </div>
 
-                  <Button
-                    as={Link}
-                    href="/auth/register"
-                    color="primary"
-                    className="rounded-xl px-5 font-semibold shadow-lg shadow-blue-900/30"
-                  >
-                    Register
-                  </Button>
-
-                </div>
-
-                {/* Mobile Button */}
+                {/* Mobile Hamburger Toggle Button */}
                 <button
                   type="button"
                   onClick={() => setIsMenuOpen((prev) => !prev)}
@@ -139,7 +139,7 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                {/* Logged In User */}
+                {/* Logged In User Dropdown */}
                 <Dropdown placement="bottom-end">
                   <DropdownTrigger>
                     <button
@@ -165,8 +165,6 @@ export default function Navbar() {
                   </DropdownTrigger>
 
                   <DropdownMenu aria-label="User menu" className="border border-gray-800 bg-gray-950 p-1 text-gray-200">
-
-                    {/* User Information */}
                     <DropdownItem
                       key="profile-info"
                       isReadOnly
@@ -183,7 +181,6 @@ export default function Navbar() {
                       </div>
                     </DropdownItem>
 
-                    {/* My Profile */}
                     <DropdownItem key="profile">
                       <Link
                         href="/profile"
@@ -194,7 +191,6 @@ export default function Navbar() {
                       </Link>
                     </DropdownItem>
 
-                    {/* Logout */}
                     <DropdownItem
                       key="logout"
                       className="text-danger"
@@ -202,18 +198,14 @@ export default function Navbar() {
                       onPress={handleLogout}
                     >
                       <div className="flex items-center gap-2">
-                        <ArrowRightFromSquare
-                          width={17}
-                          height={17}
-                        />
+                        <ArrowRightFromSquare width={17} height={17} />
                         Logout
                       </div>
                     </DropdownItem>
-
                   </DropdownMenu>
                 </Dropdown>
 
-                {/* Mobile Menu Button */}
+                {/* Mobile Menu Button for Logged In User */}
                 <button
                   type="button"
                   onClick={() => setIsMenuOpen((prev) => !prev)}
@@ -231,13 +223,10 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Dropdown */}
         {isMenuOpen && (
           <div className="mt-2 w-full rounded-2xl border border-gray-800 bg-gray-950 p-4 shadow-xl shadow-black/20 md:hidden">
-
             <nav className="flex flex-col gap-1">
-
-              {/* Active Mobile Link */}
               <Link
                 href="/"
                 onClick={closeMenu}
@@ -264,32 +253,26 @@ export default function Navbar() {
                 </Link>
               )}
 
-              {/* Mobile Auth */}
+              {/* Mobile Auth Buttons */}
               {!isLoggedIn && (
                 <div className="mt-2 grid grid-cols-2 gap-2 border-t border-gray-800 pt-4">
-
-                  <Button
-                    as={Link}
+                  <Link
                     href="/auth/login"
-                    variant="bordered"
-                    onPress={closeMenu}
-                    className="border-gray-700 text-gray-300 hover:bg-gray-900 hover:text-white"
+                    onClick={closeMenu}
+                    className="inline-flex items-center justify-center rounded-xl border border-gray-700 px-4 py-2.5 text-sm font-semibold text-gray-300 transition hover:bg-gray-900 hover:text-white"
                   >
                     Login
-                  </Button>
+                  </Link>
 
-                  <Button
-                    as={Link}
+                  <Link
                     href="/auth/register"
-                    color="primary"
-                    onPress={closeMenu}
+                    onClick={closeMenu}
+                    className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition hover:bg-blue-500"
                   >
                     Register
-                  </Button>
-
+                  </Link>
                 </div>
               )}
-
             </nav>
           </div>
         )}

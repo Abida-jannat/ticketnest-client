@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,15 +24,20 @@ export default function LoginPage() {
         password,
       }, {
         onSuccess: () => {
+          toast.success("Successfully logged in!");
           router.push("/");
         },
       });
 
       if (error) {
-        setError(error.message || "Invalid email or password");
+        const errorMsg = "Account not found or invalid credentials. Please register first.";
+        setError(errorMsg);
+        toast.error(errorMsg);
       }
     } catch (err) {
-      setError("An unexpected error occurred.");
+      const errorMsg = "An unexpected error occurred. Please register first.";
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }

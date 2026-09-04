@@ -25,7 +25,7 @@ export default function RegisterPage() {
         name,
       }, {
         onSuccess: () => {
-          router.push("/");
+          router.push("/auth/login");
         },
       });
 
@@ -39,7 +39,7 @@ export default function RegisterPage() {
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleRegister = async () => {
     await signUp.social({
       provider: "google",
       callbackURL: "/",
@@ -111,7 +111,7 @@ export default function RegisterPage() {
 
         <button
           type="button"
-          onClick={handleGoogleLogin}
+          onClick={handleGoogleRegister}
           className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-800 bg-gray-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
         >
           <span className="text-lg">🌐</span>
