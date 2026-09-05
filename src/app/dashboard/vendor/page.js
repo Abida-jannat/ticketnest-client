@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function VendorDashboard() {
   return (
-    <div className="min-h-screen bg-white p-6 md:p-10">
+    <div className="min-h-screen  bg-gray-950 p-6 md:p-10">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-10">
@@ -19,17 +19,17 @@ export default function VendorDashboard() {
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+          <div className=" bg-gray-950 border border-gray-800 rounded-xl p-6 shadow-sm">
             <p className="text-gray-500 text-sm">My Tickets</p>
             <h2 className="text-3xl font-bold text-gray-900 mt-2">0</h2>
           </div>
 
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+          <div className=" bg-gray-950 border border-gray-800 rounded-xl p-6 shadow-sm">
             <p className="text-gray-500 text-sm">Bookings</p>
             <h2 className="text-3xl font-bold text-gray-900 mt-2">0</h2>
           </div>
 
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+          <div className=" bg-gray-950 border border-gray-800 rounded-xl p-6 shadow-sm">
             <p className="text-gray-500 text-sm">Vendor Account</p>
             <h2 className="text-lg font-semibold text-green-600 mt-2">
               Active
@@ -47,7 +47,7 @@ export default function VendorDashboard() {
             {/* Add New Ticket */}
             <Link
               href="/dashboard/vendor/add-ticket"
-              className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition"
+              className=" bg-gray-950 border border-gray-800 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition"
             >
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 Add New Ticket
@@ -60,7 +60,7 @@ export default function VendorDashboard() {
             {/* My Added Tickets */}
             <Link
               href="/dashboard/vendor/my-tickets"
-              className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition"
+              className=" bg-gray-950  border border-gray-800 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition"
             >
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 My Added Tickets
@@ -73,7 +73,7 @@ export default function VendorDashboard() {
             {/* Booking Requests */}
             <Link
               href="/dashboard/vendor/bookings"
-              className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition"
+              className=" bg-gray-950  border  border-gray-800 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition"
             >
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 Booking Requests
@@ -86,7 +86,7 @@ export default function VendorDashboard() {
             {/* Vendor Profile */}
             <Link
               href="/dashboard/vendor/profile"
-              className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition"
+              className=" bg-gray-950  border  border-gray-800 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition"
             >
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 Vendor Profile
