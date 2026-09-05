@@ -14,23 +14,22 @@ import { useSession } from "@/lib/auth-client";
 
 const menuItems = {
   user: [
-    {
-      name: "User Profile",
-      href: "/dashboard/profile",
-      icon: FaUser,
-    },
-    {
-      name: "My Booked Tickets",
-      href: "/dashboard/tickets",
-      icon: FaTicketAlt,
-    },
-    {
-      name: "Transaction History",
-      href: "/dashboard/transactions",
-      icon: FaHistory,
-    },
-  ],
-
+  {
+    name: "User Profile",
+    href: "/dashboard/user/profile",
+    icon: FaUser,
+  },
+  {
+    name: "My Booked Tickets",
+    href: "/dashboard/user/tickets",
+    icon: FaTicketAlt,
+  },
+  {
+    name: "Transaction History",
+    href: "/dashboard/user/transactions",
+    icon: FaHistory,
+  },
+],
   vendor: [
     {
       name: "Vendor Profile",

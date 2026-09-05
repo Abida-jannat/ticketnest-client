@@ -139,10 +139,6 @@ export default function EditTicketPage() {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
-  // --------------------------------------------------
-  // INPUT CHANGE
-  // --------------------------------------------------
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -152,9 +148,7 @@ export default function EditTicketPage() {
     }));
   };
 
-  // --------------------------------------------------
-  // PERKS
-  // --------------------------------------------------
+  
 
   const handlePerkChange = (perk) => {
     setFormData((prev) => {
@@ -169,9 +163,7 @@ export default function EditTicketPage() {
     });
   };
 
-  // --------------------------------------------------
-  // UPDATE TICKET
-  // --------------------------------------------------
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -2,7 +2,7 @@ import { Avatar } from "@heroui/react";
 
 export default function ProfilePage() {
   const user = {
-    name: "Abida Jannat",
+    name: "name",
     email: "user@example.com",
     role: "user",
     avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",

@@ -1,11 +1,8 @@
 import { CreditCard } from "@gravity-ui/icons";
 
-// Example async server component to fetch and display Stripe transactions
+
 export default async function TransactionsPage() {
-  // TODO: Replace this fetch call with your actual API endpoint or database query
-  // Example: const res = await fetch('http://localhost:3000/api/transactions');
-  // const data = await res.json();
-  
+
   const transactions = [
     {
       id: "txn_123456789",

@@ -30,9 +30,7 @@ export default function RevenueOverviewPage() {
   const vendorEmail = session?.user?.email;
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-  // ==========================================
-  // FETCH VENDOR TICKETS + BOOKINGS
-  // ==========================================
+  
 
   useEffect(() => {
     if (sessionLoading) return;
@@ -90,14 +88,9 @@ export default function RevenueOverviewPage() {
     fetchRevenueData();
   }, [vendorEmail, sessionLoading, apiUrl]);
 
-  // ==========================================
-  // CALCULATE REVENUE
-  // ==========================================
 
-  // Total tickets added by vendor
   const totalTicketsAdded = tickets.length;
 
-  // Only accepted bookings count
   const acceptedBookings = bookings.filter(
     (booking) => booking.status === "accepted"
   );
@@ -116,10 +109,7 @@ export default function RevenueOverviewPage() {
     0
   );
 
-  // ==========================================
-  // CHART DATA
-  // ==========================================
-
+ 
   const chartData = [
     {
       name: "Tickets Added",
@@ -135,9 +125,7 @@ export default function RevenueOverviewPage() {
     },
   ];
 
-  // ==========================================
-  // STATS
-  // ==========================================
+  
 
   const stats = [
     {
