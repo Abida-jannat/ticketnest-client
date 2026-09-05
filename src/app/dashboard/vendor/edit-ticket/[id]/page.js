@@ -96,9 +96,7 @@ export default function EditTicketPage() {
           transportType: foundTicket.transportType || "",
           price: foundTicket.price || "",
           quantity: foundTicket.quantity || "",
-          departureDateTime: formatDateTimeLocal(
-            foundTicket.departureDateTime
-          ),
+          
           perks: Array.isArray(foundTicket.perks)
             ? foundTicket.perks
             : [],
